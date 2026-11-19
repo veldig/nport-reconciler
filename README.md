@@ -2,6 +2,10 @@
 
 Pulls an ETF's public N-PORT filings from SEC EDGAR, reconciles holdings between two filing periods, surfaces exceptions, and routes each one through a review queue with a permanent audit trail: what changed, who decided, when, and why.
 
+**Live demo:** https://nport-reconciler.vercel.app
+
+**Walkthrough video (78 seconds):** [docs/walkthrough.mp4](docs/walkthrough.mp4)
+
 The demo fund is **ARK Innovation ETF (ARKK)**, a series of ARK ETF Trust (CIK 1579982). Every number in the app comes from its real NPORT-P filings, and every holding links back to the exact filing and row it came from.
 
 ![Exception queue with the evidence drawer open on a real ARKK weight change](docs/screenshots/queue.png)
@@ -105,9 +109,9 @@ To track a different fund, edit `fund.config.json` (CIK plus series name or seri
 
 ## Deploy
 
-1. Create a Postgres database (Neon, PlanetScale Postgres, Supabase) and set `DATABASE_URL` in `.env.local`.
-2. `npm run db:migrate && npm run ingest` to load it.
-3. Import the repo in Vercel and set `DATABASE_URL`. The deployed app only reads and writes the database; it never calls EDGAR.
+1. Create a Postgres database (Neon, PlanetScale Postgres, Supabase).
+2. Import the repo in Vercel and set `DATABASE_URL`.
+3. Deploy. The `vercel-build` script runs the migrations and loads the committed filings before building, so the database is ready on the first deploy. Re-running is safe: ingest skips filings already loaded and never touches reviewer decisions. The deployed app never calls EDGAR.
 
 ## Data source notes
 
