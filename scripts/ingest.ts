@@ -5,13 +5,15 @@
 import { readFile } from "node:fs/promises";
 import { createHash } from "node:crypto";
 import path from "node:path";
-import { and, asc, eq } from "drizzle-orm";
+import { and, asc, eq, isNull } from "drizzle-orm";
 import { db } from "../src/db";
 import { auditLog, exceptions, filings, holdings, reconciliationRuns } from "../src/db/schema";
 import { parseNport } from "../src/lib/nport-parser";
 import { reconcile, DEFAULT_PARAMS } from "../src/lib/reconcile";
 
 interface ManifestFiling {
+  ticker?: string | null;
+  tickerSource?: string | null;
   cik: string;
   seriesId: string;
   seriesName: string;
@@ -28,6 +30,11 @@ const SYSTEM_ACTOR = "system (ingest script)";
 async function ingestFiling(f: ManifestFiling): Promise<number> {
   const existing = await db.select({ id: filings.id }).from(filings).where(eq(filings.accessionNumber, f.accession));
   if (existing.length) {
+    // Filings are never re-ingested, but a ticker resolved after the first load is filled in.
+    if (f.ticker) {
+      await db.update(filings).set({ ticker: f.ticker, tickerSource: f.tickerSource ?? null })
+        .where(and(eq(filings.id, existing[0].id), isNull(filings.ticker)));
+    }
     console.log(`skip   ${f.accession} (already ingested as filing #${existing[0].id})`);
     return existing[0].id;
   }
@@ -51,6 +58,8 @@ async function ingestFiling(f: ManifestFiling): Promise<number> {
         registrantName: parsed.registrantName,
         seriesId: parsed.seriesId!,
         seriesName: parsed.seriesName ?? f.seriesName,
+        ticker: f.ticker ?? null,
+        tickerSource: f.tickerSource ?? null,
         accessionNumber: f.accession,
         filingDate: f.filingDate,
         fiscalYearEnd: parsed.fiscalYearEnd,

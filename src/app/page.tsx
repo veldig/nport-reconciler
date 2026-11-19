@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { getOverview } from "@/server/queries";
-import { EXCEPTION_TYPES } from "@/lib/reconcile";
+import { tallyExceptions } from "@/lib/tally";
+import { diffStrings } from "@/lib/decimal";
 import { fmtDate, fmtExact, fmtUsdCompact, TYPE_LABELS } from "@/lib/format";
 import { FilingLink, NoDataYet, PageHeader } from "@/components/ui";
 
@@ -21,8 +22,12 @@ export default async function OverviewPage() {
   const statusCount = (s: string) => byStatus.find((b) => b.status === s)?.count ?? 0;
   const total = byStatus.reduce((a, b) => a + b.count, 0);
   const open = statusCount("open");
-  const count = (type: string, sev?: string) =>
-    byType.filter((b) => b.type === type && (!sev || b.severity === sev)).reduce((a, b) => a + b.count, 0);
+  const tally = tallyExceptions(byType);
+  // Holdings above 100% of net assets mean liabilities exceed the fund's other assets (cash, receivables).
+  const overHundred = [prior, current].some((p) => {
+    const d = diffStrings(p.filing.netAssets, p.sumValueUsd);
+    return d != null && d.startsWith("-");
+  });
 
   const periods = [
     { label: "Prior period", p: prior },
@@ -31,9 +36,9 @@ export default async function OverviewPage() {
 
   return (
     <>
-      <PageHeader title={fund.seriesName}>
+      <PageHeader title={fund.ticker ? `${fund.seriesName} (${fund.ticker})` : fund.seriesName}>
         <span className="flex flex-wrap gap-x-5 gap-y-1">
-          <span>{fund.registrantName}</span>
+          <span>Trust: {fund.registrantName}</span>
           <span>CIK {fund.cik}</span>
           <span>Series {fund.seriesId}</span>
         </span>
@@ -63,12 +68,16 @@ export default async function OverviewPage() {
                   {fmtExact(p.sumValueUsd)} USD
                   <span className="ml-2 text-xs text-muted">{fmtExact(p.sumPctValue)}% of net assets</span>
                 </dd>
+                <dt className="text-muted">Net assets minus holdings</dt>
+                <dd>{fmtExact(diffStrings(p.filing.netAssets, p.sumValueUsd))} USD</dd>
               </dl>
             </div>
           ))}
         </div>
         <p className="mt-2 text-xs text-muted">
-          Sums are computed exactly from the filed values. They usually differ slightly from net assets because of cash and other assets and liabilities not reported as holdings.
+          {overHundred
+            ? "Holdings can sum above 100% of net assets when the fund's liabilities, such as payables, exceed its cash and other assets that are not listed as holdings. These sums are computed exactly from the filed values and match the filing."
+            : "Holdings sum below 100% of net assets when the fund holds cash and other assets that are not listed as holdings. These sums are computed exactly from the filed values and match the filing."}
         </p>
       </section>
 
@@ -106,8 +115,9 @@ export default async function OverviewPage() {
               </tr>
             </thead>
             <tbody>
-              {EXCEPTION_TYPES.map((t) => {
-                const n = count(t);
+              {tally.rows.map((row) => {
+                const t = row.type;
+                const n = row.total;
                 return (
                   <tr key={t} className="border-t border-rule">
                     <td className="px-4 py-2">
@@ -120,7 +130,7 @@ export default async function OverviewPage() {
                       )}
                     </td>
                     {(["high", "medium", "low"] as const).map((s) => {
-                      const c = count(t, s);
+                      const c = row[s];
                       return (
                         <td key={s} className={`px-4 py-2 text-right ${c ? `${SEV_TEXT[s]} font-medium` : "text-faint"}`}>
                           {c || "0"}
@@ -132,6 +142,15 @@ export default async function OverviewPage() {
                 );
               })}
             </tbody>
+            <tfoot>
+              <tr className="border-t border-rule bg-wash font-medium">
+                <td className="px-4 py-2">Total</td>
+                {(["high", "medium", "low"] as const).map((s) => (
+                  <td key={s} className="px-4 py-2 text-right">{tally.rows.reduce((a, r) => a + r[s], 0)}</td>
+                ))}
+                <td className="px-4 py-2 text-right">{tally.total}</td>
+              </tr>
+            </tfoot>
           </table>
         </div>
       </section>

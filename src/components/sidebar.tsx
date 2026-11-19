@@ -33,6 +33,9 @@ export function Sidebar() {
           );
         })}
       </nav>
+      <a href="/walkthrough.mp4" target="_blank" rel="noreferrer" className="hidden text-sm text-link underline decoration-link/30 underline-offset-2 hover:decoration-link md:block">
+        Watch the 78-second walkthrough
+      </a>
       <div className="md:mt-auto">
         <ReviewerSelect />
       </div>

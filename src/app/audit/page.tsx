@@ -24,6 +24,7 @@ export default async function AuditPage() {
     <>
       <PageHeader title="Audit log">
         Every ingest, reconciliation and review decision, newest first. The database rejects any update or delete on this table, so entries are permanent.
+        <span className="mt-2 block rounded-md border border-rule bg-wash px-3 py-2 text-ink">Public demo: anyone can record decisions here. In production this would be gated by real auth and roles.</span>
       </PageHeader>
       {rows.length === 0 ? (
         <EmptyState title="No activity yet">Entries appear here when filings are ingested and when reviewers approve, dismiss or reopen exceptions.</EmptyState>

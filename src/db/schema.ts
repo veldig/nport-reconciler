@@ -11,6 +11,8 @@ export const filings = pgTable("filings", {
   registrantName: text("registrant_name"),
   seriesId: text("series_id").notNull(),
   seriesName: text("series_name").notNull(),
+  ticker: text("ticker"), // from SEC's company_tickers_mf.json, matched on series ID
+  tickerSource: text("ticker_source"),
   accessionNumber: text("accession_number").notNull(),
   formType: text("form_type").notNull().default("NPORT-P"),
   filingDate: date("filing_date"),

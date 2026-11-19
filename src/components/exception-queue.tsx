@@ -411,6 +411,7 @@ function DecisionForm({ exception: e }: { exception: ExceptionRow }) {
   return (
     <section aria-labelledby="decision-h" className="rounded-lg border border-rule bg-wash/60 p-4">
       <h3 id="decision-h" className="text-sm font-semibold">{isOpen ? "Decision" : "Reopen this exception"}</h3>
+      <p className="mt-1 text-xs text-muted">Public demo: anyone can record decisions here. In production this would be gated by real auth and roles.</p>
       {!reviewer ? (
         <p className="mt-1 text-sm text-muted">Choose who is reviewing in the sidebar before recording a decision.</p>
       ) : (

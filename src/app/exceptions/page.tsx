@@ -19,7 +19,7 @@ export default async function ExceptionsPage({ searchParams }: { searchParams: P
   return (
     <>
       <PageHeader title="Exception queue">
-        {run.current.seriesName}: {fmtDate(run.prior.reportPeriodDate)} compared with {fmtDate(run.current.reportPeriodDate)}. Approve to accept a change as
+        {run.current.seriesName}{run.current.ticker ? ` (${run.current.ticker})` : ""}: {fmtDate(run.prior.reportPeriodDate)} compared with {fmtDate(run.current.reportPeriodDate)}. Approve to accept a change as
         explained, or dismiss when it is not a real issue. Both need a reason, and both are written to the audit log.
       </PageHeader>
       {data.exceptions.length === 0 ? (

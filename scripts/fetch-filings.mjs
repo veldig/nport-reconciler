@@ -114,6 +114,22 @@ if (listMode) {
   for (const [id, name] of seen) console.log(`  ${id}  ${name}`);
   process.exit(0);
 }
+// Resolve the fund's ticker from SEC's mutual fund and ETF ticker file, matched on series ID.
+let ticker = null;
+const tickerSource = "https://www.sec.gov/files/company_tickers_mf.json";
+if (matches.length) {
+  try {
+    const mf = JSON.parse(await secGet(tickerSource));
+    const i = { cik: mf.fields.indexOf("cik"), series: mf.fields.indexOf("seriesId"), symbol: mf.fields.indexOf("symbol") };
+    const hits = [...new Set(mf.data.filter((r) => r[i.series] === matches[0].seriesId).map((r) => r[i.symbol]))];
+    if (hits.length === 1) ticker = hits[0];
+    else console.log(`Ticker lookup for ${matches[0].seriesId} returned ${hits.length} symbols; leaving it blank.`);
+  } catch (e) {
+    console.log(`Ticker lookup failed (${e.message}); leaving it blank.`);
+  }
+  for (const m of matches) Object.assign(m, { ticker, tickerSource: ticker ? tickerSource : null });
+}
+
 if (matches.length < 2) {
   console.error(`\nOnly found ${matches.length} filing(s) for "${config.seriesName}". Run with --list to see series names.`);
   process.exit(1);

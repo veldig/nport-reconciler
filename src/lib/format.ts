@@ -55,6 +55,7 @@ export const TYPE_LABELS: Record<string, string> = {
   DUPLICATE_HOLDING: "Duplicate holding",
   NON_USD_CURRENCY: "Non-USD currency",
   IDENTIFIER_CHANGE: "Identifier change",
+  OTHER: "Other",
 };
 
 export const UNIT_LABELS: Record<string, string> = {

@@ -4,9 +4,11 @@ Pulls an ETF's public N-PORT filings from SEC EDGAR, reconciles holdings between
 
 **Live demo:** https://nport-reconciler.vercel.app
 
-**Walkthrough video (78 seconds):** [docs/walkthrough.mp4](docs/walkthrough.mp4)
+**Walkthrough video (78 seconds):** https://nport-reconciler.vercel.app/walkthrough.mp4 (plays in the browser)
 
-The demo fund is **ARK Innovation ETF (ARKK)**, a series of ARK ETF Trust (CIK 1579982). Every number in the app comes from its real NPORT-P filings, and every holding links back to the exact filing and row it came from.
+**Public demo:** anyone can record decisions on the live app. In production this would be gated by real auth and roles.
+
+The demo fund is **ARK Innovation ETF (ARKK)**, series S000042977 of ARK ETF Trust (CIK 1579982). The ticker comes from SEC's fund ticker file (`company_tickers_mf.json`), matched on series ID. Every number in the app comes from its real NPORT-P filings, and every holding links back to the exact filing and row it came from.
 
 ![Exception queue with the evidence drawer open on a real ARKK weight change](docs/screenshots/queue.png)
 
@@ -120,7 +122,7 @@ To track a different fund, edit `fund.config.json` (CIK plus series name or seri
 - ARK ETF Trust files NPORT-P quarterly, for periods ending in January, April, July and October, about 50 to 60 days after period end.
 - `repPdDate` is the report date used as the period. `repPdEnd` is the fund's fiscal year end, not the period end.
 - SEC fair access rules: requests carry a descriptive `User-Agent` with contact details and stay under 10 per second. Downloads are cached and never re-fetched.
-- Holdings do not sum exactly to net assets; cash, receivables and liabilities sit outside the holdings list. The overview shows both so the gap is visible.
+- Holdings do not sum exactly to net assets, because cash, receivables and liabilities sit outside the holdings list. For ARKK on Jul 31, 2026, holdings total 5,570,094,806.41 USD (100.140766870811% of net assets) against net assets of 5,562,264,980.05 USD: liabilities exceed the fund's other assets by 7,829,826.36 USD. That matches the filing. The overview shows the difference for each period.
 
 ## Design decisions
 
