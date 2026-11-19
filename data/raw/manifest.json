@@ -1,0 +1,31 @@
+{
+  "fetchedAt": "2026-11-19T15:14:03.551Z",
+  "entityName": "ARK ETF Trust",
+  "retrievedVia": "EDGAR via browser, SHA-256 verified",
+  "filings": [
+    {
+      "cik": "1579982",
+      "seriesId": "S000042977",
+      "seriesName": "ARK Innovation ETF",
+      "accession": "0000940400-26-037955",
+      "filingDate": "2026-09-22",
+      "reportPeriodDate": "2026-07-31",
+      "fiscalYearEnd": "2026-07-31",
+      "url": "https://www.sec.gov/Archives/edgar/data/1579982/000094040026037955/primary_doc.xml",
+      "localPath": "data/raw/1579982/0000940400-26-037955.xml",
+      "sha256": "6c54fb7cbb8d2e06f2311445bd2e725f84fbd6314f4934ae980040f0da8b8622"
+    },
+    {
+      "cik": "1579982",
+      "seriesId": "S000042977",
+      "seriesName": "ARK Innovation ETF",
+      "accession": "0000940400-26-025084",
+      "filingDate": "2026-06-23",
+      "reportPeriodDate": "2026-04-30",
+      "fiscalYearEnd": "2026-07-31",
+      "url": "https://www.sec.gov/Archives/edgar/data/1579982/000094040026025084/primary_doc.xml",
+      "localPath": "data/raw/1579982/0000940400-26-025084.xml",
+      "sha256": "b312342f154a0f6cc27730b22e73aa6fc9d132df6daeadd27be390b18b6aad84"
+    }
+  ]
+}

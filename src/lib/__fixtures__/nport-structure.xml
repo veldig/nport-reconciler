@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- TEST FIXTURE ONLY. Synthetic values that follow the NPORT-P XML structure, used to unit test the parser.
+     Never loaded into the app; everything the app shows comes from real EDGAR filings. -->
+<edgarSubmission xmlns="http://www.sec.gov/edgar/nport" xmlns:com="http://www.sec.gov/edgar/common" xmlns:ncom="http://www.sec.gov/edgar/nportcommon">
+  <headerData>
+    <submissionType>NPORT-P</submissionType>
+    <filerInfo>
+      <seriesClassInfo><seriesId>S000000001</seriesId></seriesClassInfo>
+    </filerInfo>
+  </headerData>
+  <formData>
+    <genInfo>
+      <regName>Test Trust</regName>
+      <regCik>0000000001</regCik>
+      <seriesName>Test Fund ETF</seriesName>
+      <seriesId>S000000001</seriesId>
+      <repPdEnd>2026-12-31</repPdEnd>
+      <repPdDate>2026-06-30</repPdDate>
+    </genInfo>
+    <fundInfo>
+      <totAssets>1000500.25</totAssets>
+      <totLiabs>500.25</totLiabs>
+      <netAssets>1000000.00</netAssets>
+    </fundInfo>
+    <invstOrSecs>
+      <invstOrSec>
+        <name>Alpha Corp</name>
+        <lei>549300ABCDEFGHIJKL12</lei>
+        <title>Alpha Corp Class A</title>
+        <cusip>000000AA1</cusip>
+        <identifiers>
+          <isin value="US000000AA16"/>
+          <ticker value="ALPH"/>
+        </identifiers>
+        <balance>1500.00000000</balance>
+        <units>NS</units>
+        <curCd>USD</curCd>
+        <valUSD>75000.00000000</valUSD>
+        <pctVal>7.500000000000</pctVal>
+        <payoffProfile>Long</payoffProfile>
+        <assetCat>EC</assetCat>
+        <issuerCat>CORP</issuerCat>
+        <invCountry>US</invCountry>
+        <isRestrictedSec>N</isRestrictedSec>
+        <fairValLevel>1</fairValLevel>
+        <securityLending><isCashCollateral>N</isCashCollateral></securityLending>
+      </invstOrSec>
+      <invstOrSec>
+        <name>Beta AG</name>
+        <lei>N/A</lei>
+        <title>Beta AG</title>
+        <cusip>N/A</cusip>
+        <identifiers>
+          <other otherDesc="SEDOL" value="B000001"/>
+          <other otherDesc="Internal" value="X-42"/>
+        </identifiers>
+        <balance>200</balance>
+        <units>NS</units>
+        <currencyConditional curCd="EUR" exchangeRt="0.92000000"/>
+        <valUSD>5000.12</valUSD>
+        <pctVal>0.500012</pctVal>
+        <payoffProfile>Long</payoffProfile>
+        <assetConditional assetCat="OTHER" description="Depositary receipt"/>
+        <issuerConditional issuerCat="OTHER" desc="Foreign issuer"/>
+        <invCountry>DE</invCountry>
+        <isRestrictedSec>N</isRestrictedSec>
+        <fairValLevel>2</fairValLevel>
+      </invstOrSec>
+    </invstOrSecs>
+  </formData>
+</edgarSubmission>

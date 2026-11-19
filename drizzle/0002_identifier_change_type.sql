@@ -1,0 +1,2 @@
+ALTER TABLE "exceptions" DROP CONSTRAINT "exceptions_type_ck";--> statement-breakpoint
+ALTER TABLE "exceptions" ADD CONSTRAINT "exceptions_type_ck" CHECK ("exceptions"."type" in ('NEW_POSITION', 'REMOVED_POSITION', 'WEIGHT_CHANGE', 'VALUE_SHARE_MISMATCH', 'MISSING_IDENTIFIER', 'DUPLICATE_HOLDING', 'NON_USD_CURRENCY', 'IDENTIFIER_CHANGE'));
